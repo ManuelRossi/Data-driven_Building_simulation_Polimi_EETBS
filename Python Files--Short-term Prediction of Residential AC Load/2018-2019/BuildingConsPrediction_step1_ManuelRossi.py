@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os 
 # importing the external files
-ExternalFilesFolder =  r"C:\Users\behzad\Dropbox\2 Teaching Activities\0 EETBS 2018\forked_repos\python4ScientificComputing_Numpy_Pandas_MATPLotLIB\ExternalFiles"
+ExternalFilesFolder = r"C:\Users\Famiglia\Documents\Manuel\Polimi\MAGISTRALE\PRIMO ANNO\Primo semestre\Bezhad\python4ScientificComputing_Numpy_Pandas_MATPLotLIB\ExternalFiles"
 ConsumptionFileName= "consumption_5545.csv"
 TemperatureFileName= "Austin_weather_2014.csv"
 IrradianceFileName= "irradiance_2014_gen.csv"
@@ -73,10 +73,26 @@ DF_joined.head(24)
 DF_joined_cleaned = DF_joined.dropna()
 DF_joined_cleaned.head(24)
 
-temp_min = DF_joined_cleaned["temperature"].min()
-temp_max = DF_joined_cleaned["temperature"].max()
-DF_joined_cleaned["temperature_normalized"]=(DF_joined_cleaned["temperature"]-temp_min)/(temp_max-temp_min)
-DF_joined_cleaned.head(24)
+DF_joined_cleaned_chosenDates=DF_joined_cleaned["2014-08-01":"2014-08-02"]
+DF_joined_cleaned_chosenDates.head(24)
+
+DF_joined_cleaned_chosenDates.describe()
 
 
 
+DF_joined_cleaned_chosenDates_min = DF_joined_cleaned_chosenDates.min()
+DF_joined_cleaned_chosenDates_max = DF_joined_cleaned_chosenDates.max()
+DF_joined_cleaned_chosenDates_Nornamlized=(DF_joined_cleaned_chosenDates-DF_joined_cleaned_chosenDates_min)/(DF_joined_cleaned_chosenDates_max-DF_joined_cleaned_chosenDates_min)
+DF_joined_cleaned_chosenDates_Nornamlized.plot()
+
+DF_joined_cleaned_chosenDates.to_csv("MyDataFrame.csv",sep=";")
+
+df_lagged=DF_joined_cleaned_chosenDates.copy()
+df_lagged["Temperature-1h"]=df_lagged["temperature"].shift(1)
+
+#Renaming the column name before applying the function
+#First way
+DF_mod.columns=["AC_consumption","Temperature","Irradiance" ]
+
+#Second way
+DF_mod=DF_mod.rename(columns={"air_conditioner_5545":"AC_consumption","temperature":"Temperature","gen":"Irradiance"})
